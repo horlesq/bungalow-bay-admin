@@ -1,5 +1,12 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
+import {
+    QueryClient,
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query";
+import { deleteBungalow } from "../../services/apiBungalows";
+import toast from "react-hot-toast";
 
 const TableRow = styled.div`
     display: grid;
@@ -42,12 +49,27 @@ const Discount = styled.div`
 
 export function BungalowRow({ bungalow }) {
     const {
+        id,
         name,
         max_capacity: maxCapacity,
         price,
         discount,
         image,
     } = bungalow;
+
+    const queryClient = useQueryClient();
+
+    const { isLoading, mutate } = useMutation({
+        mutationFn: deleteBungalow,
+        onSuccess: () => {
+            toast.success("Bungalow deleted successfully.");
+            queryClient.invalidateQueries("bungalows");
+        },
+        onError: (error) => {
+            toast.error("An error occurred. Please try again.");
+            console.error(error);
+        },
+    });
 
     return (
         <TableRow role="row">
@@ -56,7 +78,9 @@ export function BungalowRow({ bungalow }) {
             <div>Up to {maxCapacity} persons</div>
             <Price>{formatCurrency(price)}</Price>
             <Discount>{formatCurrency(discount)}</Discount>
-            <button>Delete</button>
+            <button onClick={() => mutate(id)} disabled={isLoading}>
+                Delete
+            </button>
         </TableRow>
     );
 }

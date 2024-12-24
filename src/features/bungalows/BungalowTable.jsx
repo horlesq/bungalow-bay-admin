@@ -33,7 +33,7 @@ export function BungalowTable({ children }) {
         isLoading,
         data: bungalows,
         error,
-    } = useQuery({ queryKey: ["bungalow"], queryFn: getBungalows });
+    } = useQuery({ queryKey: ["bungalows"], queryFn: getBungalows });
 
     if (isLoading) return <Spinner />;
 

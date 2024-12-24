@@ -10,3 +10,12 @@ export async function getBungalows() {
 
     return data;
 }
+
+export async function deleteBungalow(id) {
+    const { error } = await supabase.from("bungalows").delete().eq("id", id);
+
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+}
