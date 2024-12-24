@@ -42,11 +42,11 @@ const Error = styled.span`
     color: var(--color-red-700);
 `;
 
-function CreateCabinForm() {
+function CreateBungalowForm() {
     return (
         <Form>
             <FormRow>
-                <Label htmlFor="name">Cabin name</Label>
+                <Label htmlFor="name">Bungalow name</Label>
                 <Input type="text" id="name" />
             </FormRow>
 
@@ -71,7 +71,7 @@ function CreateCabinForm() {
             </FormRow>
 
             <FormRow>
-                <Label htmlFor="image">Cabin photo</Label>
+                <Label htmlFor="image">Bungalow photo</Label>
                 <FileInput id="image" accept="image/*" />
             </FormRow>
 
@@ -80,10 +80,10 @@ function CreateCabinForm() {
                 <Button variation="secondary" type="reset">
                     Cancel
                 </Button>
-                <Button>Edit cabin</Button>
+                <Button>Edit bungalow</Button>
             </FormRow>
         </Form>
     );
 }
 
-export default CreateCabinForm;
+export default CreateBungalowForm;
