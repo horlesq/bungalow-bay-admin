@@ -6,6 +6,9 @@ import { Button } from "../../ui/Button";
 import { FileInput } from "../../ui/FileInput";
 import { Textarea } from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { createBungalow } from "../../services/apiBungalows";
 
 const FormRow = styled.div`
     display: grid;
@@ -44,10 +47,23 @@ const Error = styled.span`
 `;
 
 export function CreateBungalowForm() {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
+    const queryClient = useQueryClient();
+    const { mutate, isLoading } = useMutation({
+        mutationFn: createBungalow,
+        onSuccess: () => {
+            toast.success("Bungalow created");
+            queryClient.invalidateQueries("bungalows");
+            reset();
+        },
+        onError: (error) => {
+            toast.error("Failed to create bungalow");
+            console.error(error);
+        },
+    });
 
     function onSubmit(data) {
-        console.log(data);
+        mutate(data);
     }
 
     return (
@@ -62,17 +78,13 @@ export function CreateBungalowForm() {
                 <Input
                     type="number"
                     id="maxCapacity"
-                    {...register("maxCapacity")}
+                    {...register("max_capacity")}
                 />
             </FormRow>
 
             <FormRow>
                 <Label htmlFor="regularPrice">Regular price</Label>
-                <Input
-                    type="number"
-                    id="regularPrice"
-                    {...register("regularPrice")}
-                />
+                <Input type="number" id="regularPrice" {...register("price")} />
             </FormRow>
 
             <FormRow>
@@ -105,7 +117,7 @@ export function CreateBungalowForm() {
                 <Button variation="secondary" type="reset">
                     Cancel
                 </Button>
-                <Button>Edit bungalow</Button>
+                <Button disabled={isLoading}>Add bungalow</Button>
             </FormRow>
         </Form>
     );
