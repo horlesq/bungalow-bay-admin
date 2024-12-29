@@ -1,13 +1,12 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
-import { getBungalows } from "../services/apiBungalows";
 import { BungalowTable } from "../features/bungalows/BungalowTable";
+import { Button } from "../ui/Button";
+import { CreateBungalowForm } from "../features/bungalows/CreateBungalowForm";
 
 export function Bungalows() {
-    useEffect(() => {
-        getBungalows().then((data) => console.log(data));
-    }, []);
+    const [showForm, setShowForm] = useState(false);
 
     return (
         <>
@@ -17,6 +16,12 @@ export function Bungalows() {
             </Row>
             <Row>
                 <BungalowTable />
+
+                <Button onClick={() => setShowForm((show) => !show)}>
+                    Add bungalow
+                </Button>
+
+                {showForm && <CreateBungalowForm />}
             </Row>
         </>
     );
