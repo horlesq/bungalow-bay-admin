@@ -30,7 +30,7 @@ export function CreateBungalowForm() {
     });
 
     function onSubmit(data) {
-        mutate(data);
+        mutate({ ...data, image: data.image[0] }); // data.image is a FileList
     }
 
     function onError(errors) {
@@ -112,7 +112,12 @@ export function CreateBungalowForm() {
             </FormRow>
 
             <FormRow label="Bungalow image" error={errors.image?.message}>
-                <FileInput id="image" accept="image/*" />
+                <FileInput
+                    id="image"
+                    accept="image/*"
+                    type="file"
+                    {...register("image", { required: "Field required" })}
+                />
             </FormRow>
 
             <FormRow>
