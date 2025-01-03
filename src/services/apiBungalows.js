@@ -11,19 +11,33 @@ export async function getBungalows() {
     return data;
 }
 
-export async function createBungalow(newBungalow) {
-    const imageName = `${Math.random()}-${newBungalow.image.name}`.replace(
+export async function createEditBungalow(bungalow, id) {
+    // Check if the image is already uploaded to the storage
+    const hasImagePath = bungalow.image?.startsWith?.(supabaseUrl);
+    // Generate a random image name
+    const imageName = `${Math.random()}-${bungalow.image.name}`.replace(
         "/",
         ""
     );
-    const imagePath = `${supabaseUrl}/storage/v1/object/public/bungalow-images/${imageName}`;
+    // Get the image path
+    const imagePath = hasImagePath
+        ? bungalow.image
+        : `${supabaseUrl}/storage/v1/object/public/bungalow-images/${imageName}`;
+
+    // Create a query to the bungalows table
+    let query = supabase.from("bungalows");
 
     // Create a new bungalow in the database
-    const { data, error } = await supabase
-        .from("bungalows")
-        .insert([{ ...newBungalow, image: imagePath }])
-        .select();
+    if (!id) query = query.insert([{ ...bungalow, image: imagePath }]);
 
+    // Update an existing bungalow in the database
+    if (id)
+        query = query.update({ ...bungalow, image: imagePath }).eq("id", id);
+
+    // Execute the query
+    const { data, error } = await query.select().single();
+
+    // If there was an error creating or updating the bungalow, throw an error
     if (error) {
         console.error(error);
         throw new Error(error.message);
@@ -32,7 +46,7 @@ export async function createBungalow(newBungalow) {
     // Upload the image to the storage
     const { error: storageError } = await supabase.storage
         .from("bungalow-images")
-        .upload(imageName, newBungalow.image);
+        .upload(imageName, bungalow.image);
 
     // If there was an error uploading the image, delete the bungalow from the database
     if (storageError) {

@@ -1,23 +1,27 @@
-import styled from "styled-components";
-
+import toast from "react-hot-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { Input } from "../../ui/Input";
 import { Form } from "../../ui/Form";
 import { Button } from "../../ui/Button";
 import { FileInput } from "../../ui/FileInput";
 import { Textarea } from "../../ui/Textarea";
-import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { createBungalow } from "../../services/apiBungalows";
 import { FormRow } from "../../ui/FormRow";
+import { createEditBungalow } from "../../services/apiBungalows";
 
-export function CreateBungalowForm() {
-    const { register, handleSubmit, reset, getValues, formState } = useForm();
+export function CreateBungalowForm({ bungalowToEdit = {} }) {
+    const { id: editId, ...editValues } = bungalowToEdit || {};
+    const isEditing = Boolean(editId);
+
+    const { register, handleSubmit, reset, getValues, formState } = useForm({
+        defaultValues: isEditing ? editValues : {},
+    });
     const { errors } = formState;
 
     const queryClient = useQueryClient();
-    const { mutate, isLoading } = useMutation({
-        mutationFn: createBungalow,
+
+    const { mutate: createBungalow, isLoading: isLoadingCreate } = useMutation({
+        mutationFn: createEditBungalow,
         onSuccess: () => {
             toast.success("Bungalow created");
             queryClient.invalidateQueries("bungalows");
@@ -29,8 +33,27 @@ export function CreateBungalowForm() {
         },
     });
 
+    const { mutate: editBungalow, isLoading: isLoadingEdit } = useMutation({
+        mutationFn: ({ newBungalowData, id }) =>
+            createEditBungalow(newBungalowData, id),
+        onSuccess: () => {
+            toast.success("Bungalow edited");
+            queryClient.invalidateQueries("bungalows");
+            reset();
+        },
+        onError: (error) => {
+            toast.error("Failed to edit bungalow");
+            console.error(error);
+        },
+    });
+
     function onSubmit(data) {
-        mutate({ ...data, image: data.image[0] }); // data.image is a FileList
+        const image =
+            typeof data.image === "string" ? data.image : data.image[0];
+
+        if (isEditing)
+            editBungalow({ newBungalowData: { ...data, image }, id: editId });
+        else createBungalow({ ...data, image: image });
     }
 
     function onError(errors) {
@@ -43,7 +66,7 @@ export function CreateBungalowForm() {
                 <Input
                     type="text"
                     id="name"
-                    disabled={isLoading}
+                    disabled={isLoadingCreate || isLoadingEdit}
                     {...register("name", {
                         required: "Field required",
                     })}
@@ -57,7 +80,7 @@ export function CreateBungalowForm() {
                 <Input
                     type="number"
                     id="maxCapacity"
-                    disabled={isLoading}
+                    disabled={isLoadingCreate || isLoadingEdit}
                     {...register("max_capacity", {
                         required: "Field required",
                         min: {
@@ -72,7 +95,7 @@ export function CreateBungalowForm() {
                 <Input
                     type="number"
                     id="regularPrice"
-                    disabled={isLoading}
+                    disabled={isLoadingCreate || isLoadingEdit}
                     {...register("price", {
                         required: "Field required",
                         min: {
@@ -88,11 +111,11 @@ export function CreateBungalowForm() {
                     type="number"
                     id="discount"
                     defaultValue={0}
-                    disabled={isLoading}
+                    disabled={isLoadingCreate || isLoadingEdit}
                     {...register("discount", {
                         required: "Field required",
                         validate: (value) =>
-                            (value >= 0 && value <= getValues().price) ||
+                            (value >= 0 && value <= getValues().price * 10) ||
                             "Discount should be between 0 and regular price",
                     })}
                 />
@@ -106,7 +129,7 @@ export function CreateBungalowForm() {
                     type="number"
                     id="description"
                     defaultValue=""
-                    disabled={isLoading}
+                    disabled={isLoadingCreate || isLoadingEdit}
                     {...register("description", { required: "Field required" })}
                 />
             </FormRow>
@@ -116,7 +139,9 @@ export function CreateBungalowForm() {
                     id="image"
                     accept="image/*"
                     type="file"
-                    {...register("image", { required: "Field required" })}
+                    {...register("image", {
+                        required: isEditing ? false : "Field required",
+                    })}
                 />
             </FormRow>
 
@@ -125,7 +150,12 @@ export function CreateBungalowForm() {
                 <Button variation="secondary" type="reset">
                     Cancel
                 </Button>
-                <Button disabled={isLoading}>Add bungalow</Button>
+                <Button
+                    disabled={isLoadingCreate || isLoadingEdit}
+                    type="submit"
+                >
+                    {isEditing ? "Edit bungalow" : "Add bungalow"}
+                </Button>
             </FormRow>
         </Form>
     );

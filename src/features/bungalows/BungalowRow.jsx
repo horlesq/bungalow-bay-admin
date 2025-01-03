@@ -7,6 +7,8 @@ import {
 } from "@tanstack/react-query";
 import { deleteBungalow } from "../../services/apiBungalows";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import { CreateBungalowForm } from "./CreateBungalowForm";
 
 const TableRow = styled.div`
     display: grid;
@@ -48,6 +50,8 @@ const Discount = styled.div`
 `;
 
 export function BungalowRow({ bungalow }) {
+    const [showForm, setShowForm] = useState(false);
+
     const {
         id,
         name,
@@ -72,15 +76,23 @@ export function BungalowRow({ bungalow }) {
     });
 
     return (
-        <TableRow role="row">
-            <Img src={image} />
-            <Bungalow>{name}</Bungalow>
-            <div>Up to {maxCapacity} persons</div>
-            <Price>{formatCurrency(price)}</Price>
-            <Discount>{formatCurrency(discount)}</Discount>
-            <button onClick={() => mutate(id)} disabled={isLoading}>
-                Delete
-            </button>
-        </TableRow>
+        <>
+            <TableRow role="row">
+                <Img src={image} />
+                <Bungalow>{name}</Bungalow>
+                <div>Up to {maxCapacity} persons</div>
+                <Price>{formatCurrency(price)}</Price>
+                <Discount>{formatCurrency(discount)}</Discount>
+                <div>
+                    <button onClick={() => setShowForm((show) => !show)}>
+                        Edit
+                    </button>
+                    <button onClick={() => mutate(id)} disabled={isLoading}>
+                        Delete
+                    </button>
+                </div>
+            </TableRow>
+            {showForm && <CreateBungalowForm bungalowToEdit={bungalow} />}
+        </>
     );
 }
