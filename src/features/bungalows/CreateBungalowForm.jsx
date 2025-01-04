@@ -1,5 +1,3 @@
-import toast from "react-hot-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { Input } from "../../ui/Input";
 import { Form } from "../../ui/Form";
@@ -7,7 +5,8 @@ import { Button } from "../../ui/Button";
 import { FileInput } from "../../ui/FileInput";
 import { Textarea } from "../../ui/Textarea";
 import { FormRow } from "../../ui/FormRow";
-import { createEditBungalow } from "../../services/apiBungalows";
+import { useCreateBungalow } from "./useCreateBungalow";
+import { useEditBungalow } from "./useEditBungalow";
 
 export function CreateBungalowForm({ bungalowToEdit = {} }) {
     const { id: editId, ...editValues } = bungalowToEdit || {};
@@ -18,42 +17,23 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
     });
     const { errors } = formState;
 
-    const queryClient = useQueryClient();
-
-    const { mutate: createBungalow, isLoading: isLoadingCreate } = useMutation({
-        mutationFn: createEditBungalow,
-        onSuccess: () => {
-            toast.success("Bungalow created");
-            queryClient.invalidateQueries("bungalows");
-            reset();
-        },
-        onError: (error) => {
-            toast.error("Failed to create bungalow");
-            console.error(error);
-        },
-    });
-
-    const { mutate: editBungalow, isLoading: isLoadingEdit } = useMutation({
-        mutationFn: ({ newBungalowData, id }) =>
-            createEditBungalow(newBungalowData, id),
-        onSuccess: () => {
-            toast.success("Bungalow edited");
-            queryClient.invalidateQueries("bungalows");
-            reset();
-        },
-        onError: (error) => {
-            toast.error("Failed to edit bungalow");
-            console.error(error);
-        },
-    });
+    const { isLoadingCreate, createBungalow } = useCreateBungalow();
+    const { isLoadingEdit, editBungalow } = useEditBungalow();
 
     function onSubmit(data) {
         const image =
             typeof data.image === "string" ? data.image : data.image[0];
 
         if (isEditing)
-            editBungalow({ newBungalowData: { ...data, image }, id: editId });
-        else createBungalow({ ...data, image: image });
+            editBungalow(
+                { newBungalowData: { ...data, image }, id: editId },
+                { onSuccess: () => reset() }
+            );
+        else
+            createBungalow(
+                { ...data, image: image },
+                { onSuccess: () => reset() }
+            );
     }
 
     function onError(errors) {
@@ -146,7 +126,6 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
             </FormRow>
 
             <FormRow>
-                {/* type is an HTML attribute! */}
                 <Button variation="secondary" type="reset">
                     Cancel
                 </Button>

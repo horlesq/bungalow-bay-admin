@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Spinner } from "../../ui/Spinner";
 import { getBungalows } from "../../services/apiBungalows";
 import { BungalowRow } from "./BungalowRow";
+import { useBungalows } from "./useBungalows";
 
 const Table = styled.div`
     border: 1px solid var(--color-gray-200);
@@ -29,11 +30,7 @@ const TableHeader = styled.header`
 `;
 
 export function BungalowTable({ children }) {
-    const {
-        isLoading,
-        data: bungalows,
-        error,
-    } = useQuery({ queryKey: ["bungalows"], queryFn: getBungalows });
+    const { isLoading, bungalows } = useBungalows();
 
     if (isLoading) return <Spinner />;
 

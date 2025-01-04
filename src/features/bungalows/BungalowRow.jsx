@@ -1,14 +1,8 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
-import {
-    QueryClient,
-    useMutation,
-    useQueryClient,
-} from "@tanstack/react-query";
-import { deleteBungalow } from "../../services/apiBungalows";
-import toast from "react-hot-toast";
 import { useState } from "react";
 import { CreateBungalowForm } from "./CreateBungalowForm";
+import { useDeleteBungalow } from "./useDeleteBungalow";
 
 const TableRow = styled.div`
     display: grid;
@@ -61,19 +55,7 @@ export function BungalowRow({ bungalow }) {
         image,
     } = bungalow;
 
-    const queryClient = useQueryClient();
-
-    const { isLoading, mutate } = useMutation({
-        mutationFn: deleteBungalow,
-        onSuccess: () => {
-            toast.success("Bungalow deleted successfully.");
-            queryClient.invalidateQueries("bungalows");
-        },
-        onError: (error) => {
-            toast.error("An error occurred. Please try again.");
-            console.error(error);
-        },
-    });
+    const { isLoadingDelete, deleteBungalow } = useDeleteBungalow();
 
     return (
         <>
@@ -82,12 +64,19 @@ export function BungalowRow({ bungalow }) {
                 <Bungalow>{name}</Bungalow>
                 <div>Up to {maxCapacity} persons</div>
                 <Price>{formatCurrency(price)}</Price>
-                <Discount>{formatCurrency(discount)}</Discount>
+                {discount ? (
+                    <Discount>{formatCurrency(discount)}</Discount>
+                ) : (
+                    <span></span>
+                )}
                 <div>
                     <button onClick={() => setShowForm((show) => !show)}>
                         Edit
                     </button>
-                    <button onClick={() => mutate(id)} disabled={isLoading}>
+                    <button
+                        onClick={() => deleteBungalow(id)}
+                        disabled={isLoadingDelete}
+                    >
                         Delete
                     </button>
                 </div>
