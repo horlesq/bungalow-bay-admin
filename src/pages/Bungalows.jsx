@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Heading from "../ui/Heading";
-import Row from "../ui/Row";
+import { Row } from "../ui/Row";
 import { BungalowTable } from "../features/bungalows/BungalowTable";
 import { Button } from "../ui/Button";
 import { CreateBungalowForm } from "../features/bungalows/CreateBungalowForm";

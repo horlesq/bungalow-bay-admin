@@ -1,7 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 import { Spinner } from "../../ui/Spinner";
-import { getBungalows } from "../../services/apiBungalows";
 import { BungalowRow } from "./BungalowRow";
 import { useBungalows } from "./useBungalows";
 

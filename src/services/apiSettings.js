@@ -1,5 +1,6 @@
 import supabase from "./supabase";
 
+// This function is used to get the settings from the database
 export async function getSettings() {
   const { data, error } = await supabase.from("settings").select("*").single();
 
@@ -10,7 +11,7 @@ export async function getSettings() {
   return data;
 }
 
-// We expect a newSetting object that looks like {setting: newValue}
+// This function is used to update the settings in the database
 export async function updateSetting(newSetting) {
   const { data, error } = await supabase
     .from("settings")
