@@ -1,8 +1,13 @@
 import styled from "styled-components";
+import { IoDuplicate } from "react-icons/io5";
+import { MdModeEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { formatCurrency } from "../../utils/helpers";
 import { useState } from "react";
 import { CreateBungalowForm } from "./CreateBungalowForm";
 import { useDeleteBungalow } from "./useDeleteBungalow";
+import { useCreateBungalow } from "./useCreateBungalow";
+import { max } from "date-fns";
 
 const TableRow = styled.div`
     display: grid;
@@ -45,6 +50,8 @@ const Discount = styled.div`
 
 export function BungalowRow({ bungalow }) {
     const [showForm, setShowForm] = useState(false);
+    const { isLoadingCreate, createBungalow } = useCreateBungalow();
+    const { isLoadingDelete, deleteBungalow } = useDeleteBungalow();
 
     const {
         id,
@@ -53,9 +60,19 @@ export function BungalowRow({ bungalow }) {
         price,
         discount,
         image,
+        description,
     } = bungalow;
 
-    const { isLoadingDelete, deleteBungalow } = useDeleteBungalow();
+    function handleDuplicate() {
+        createBungalow({
+            name: `Copy of ${name}`,
+            max_capacity: maxCapacity,
+            price,
+            discount,
+            image,
+            description,
+        });
+    }
 
     return (
         <>
@@ -70,14 +87,20 @@ export function BungalowRow({ bungalow }) {
                     <span></span>
                 )}
                 <div>
+                    <button
+                        onClick={handleDuplicate}
+                        disabled={isLoadingCreate}
+                    >
+                        <IoDuplicate />
+                    </button>
                     <button onClick={() => setShowForm((show) => !show)}>
-                        Edit
+                        <MdModeEdit />
                     </button>
                     <button
                         onClick={() => deleteBungalow(id)}
                         disabled={isLoadingDelete}
                     >
-                        Delete
+                        <MdDelete />
                     </button>
                 </div>
             </TableRow>

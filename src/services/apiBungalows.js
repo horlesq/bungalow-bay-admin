@@ -44,6 +44,8 @@ export async function createEditBungalow(bungalow, id) {
     }
 
     // Upload the image to the storage
+    if (hasImagePath) return data;
+
     const { error: storageError } = await supabase.storage
         .from("bungalow-images")
         .upload(imageName, bungalow.image);
