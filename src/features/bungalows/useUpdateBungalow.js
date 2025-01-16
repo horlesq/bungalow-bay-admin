@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createEditBungalow } from "../../services/apiBungalows";
+import { createUpdateBungalow } from "../../services/apiBungalows";
 import toast from "react-hot-toast";
 
-export function useEditBungalow() {
+export function useUpdateBungalow() {
     const queryClient = useQueryClient();
 
-    const { mutate: editBungalow, isLoading: isLoadingEdit } = useMutation({
+    const { mutate: updateBungalow, isLoading: isLoadingUpdate } = useMutation({
         mutationFn: ({ newBungalowData, id }) =>
-            createEditBungalow(newBungalowData, id),
+            createUpdateBungalow(newBungalowData, id),
         onSuccess: () => {
             toast.success("Bungalow edited");
             queryClient.invalidateQueries("bungalows");
@@ -18,5 +18,5 @@ export function useEditBungalow() {
         },
     });
 
-    return { editBungalow, isLoadingEdit };
+    return { updateBungalow, isLoadingUpdate };
 }

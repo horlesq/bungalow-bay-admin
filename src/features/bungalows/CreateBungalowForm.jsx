@@ -6,7 +6,7 @@ import { FileInput } from "../../ui/FileInput";
 import { Textarea } from "../../ui/Textarea";
 import { FormRow } from "../../ui/FormRow";
 import { useCreateBungalow } from "./useCreateBungalow";
-import { useEditBungalow } from "./useEditBungalow";
+import { useUpdateBungalow } from "./useUpdateBungalow";
 
 export function CreateBungalowForm({ bungalowToEdit = {} }) {
     const { id: editId, ...editValues } = bungalowToEdit || {};
@@ -18,7 +18,7 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
     const { errors } = formState;
 
     const { isLoadingCreate, createBungalow } = useCreateBungalow();
-    const { isLoadingEdit, editBungalow } = useEditBungalow();
+    const { isLoadingUpdate, editBungalow } = useUpdateBungalow();
 
     function onSubmit(data) {
         const image =
@@ -46,7 +46,7 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
                 <Input
                     type="text"
                     id="name"
-                    disabled={isLoadingCreate || isLoadingEdit}
+                    disabled={isLoadingCreate || isLoadingUpdate}
                     {...register("name", {
                         required: "Field required",
                     })}
@@ -60,7 +60,7 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
                 <Input
                     type="number"
                     id="maxCapacity"
-                    disabled={isLoadingCreate || isLoadingEdit}
+                    disabled={isLoadingCreate || isLoadingUpdate}
                     {...register("max_capacity", {
                         required: "Field required",
                         min: {
@@ -75,7 +75,7 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
                 <Input
                     type="number"
                     id="regularPrice"
-                    disabled={isLoadingCreate || isLoadingEdit}
+                    disabled={isLoadingCreate || isLoadingUpdate}
                     {...register("price", {
                         required: "Field required",
                         min: {
@@ -91,7 +91,7 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
                     type="number"
                     id="discount"
                     defaultValue={0}
-                    disabled={isLoadingCreate || isLoadingEdit}
+                    disabled={isLoadingCreate || isLoadingUpdate}
                     {...register("discount", {
                         required: "Field required",
                         validate: (value) =>
@@ -109,7 +109,7 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
                     type="number"
                     id="description"
                     defaultValue=""
-                    disabled={isLoadingCreate || isLoadingEdit}
+                    disabled={isLoadingCreate || isLoadingUpdate}
                     {...register("description", { required: "Field required" })}
                 />
             </FormRow>
@@ -130,7 +130,7 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
                     Cancel
                 </Button>
                 <Button
-                    disabled={isLoadingCreate || isLoadingEdit}
+                    disabled={isLoadingCreate || isLoadingUpdate}
                     type="submit"
                 >
                     {isEditing ? "Edit bungalow" : "Add bungalow"}

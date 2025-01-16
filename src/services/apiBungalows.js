@@ -11,7 +11,7 @@ export async function getBungalows() {
     return data;
 }
 
-export async function createEditBungalow(bungalow, id) {
+export async function createUpdateBungalow(bungalow, id) {
     // Check if the image is already uploaded to the storage
     const hasImagePath = bungalow.image?.startsWith?.(supabaseUrl);
     // Generate a random image name
