@@ -1,13 +1,9 @@
-import { useState } from "react";
 import Heading from "../ui/Heading";
 import { Row } from "../ui/Row";
 import { BungalowTable } from "../features/bungalows/BungalowTable";
-import { Button } from "../ui/Button";
-import { CreateBungalowForm } from "../features/bungalows/CreateBungalowForm";
+import { CreateBungalow } from "../features/bungalows/CreateBungalow";
 
 export function Bungalows() {
-    const [showForm, setShowForm] = useState(false);
-
     return (
         <>
             <Row type="horizontal">
@@ -17,11 +13,7 @@ export function Bungalows() {
             <Row>
                 <BungalowTable />
 
-                <Button onClick={() => setShowForm((show) => !show)}>
-                    Add bungalow
-                </Button>
-
-                {showForm && <CreateBungalowForm />}
+                <CreateBungalow />
             </Row>
         </>
     );

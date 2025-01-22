@@ -8,7 +8,7 @@ import { FormRow } from "../../ui/FormRow";
 import { useCreateBungalow } from "./useCreateBungalow";
 import { useUpdateBungalow } from "./useUpdateBungalow";
 
-export function CreateBungalowForm({ bungalowToEdit = {} }) {
+export function CreateBungalowForm({ bungalowToEdit = {}, onClose }) {
     const { id: editId, ...editValues } = bungalowToEdit || {};
     const isEditing = Boolean(editId);
 
@@ -32,7 +32,12 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
         else
             createBungalow(
                 { ...data, image: image },
-                { onSuccess: () => reset() }
+                {
+                    onSuccess: () => {
+                        reset();
+                        onClose?.();
+                    },
+                }
             );
     }
 
@@ -41,7 +46,10 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
     }
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <Form
+            onSubmit={handleSubmit(onSubmit, onError)}
+            type={onClose ? "modal" : "regular"}
+        >
             <FormRow label="Bungalow name" error={errors.name?.message}>
                 <Input
                     type="text"
@@ -126,7 +134,11 @@ export function CreateBungalowForm({ bungalowToEdit = {} }) {
             </FormRow>
 
             <FormRow>
-                <Button variation="secondary" type="reset">
+                <Button
+                    variation="secondary"
+                    type="reset"
+                    onClick={() => onClose?.()}
+                >
                     Cancel
                 </Button>
                 <Button
