@@ -35,9 +35,12 @@ export function BungalowTable({ children }) {
                 <div></div>
             </Table.Header>
 
-            {bungalows.map((bungalow) => (
-                <BungalowRow bungalow={bungalow} key={bungalow.id} />
-            ))}
+            <Table.Body
+                data={bungalows}
+                render={(bungalow) => (
+                    <BungalowRow bungalow={bungalow} key={bungalow.id} />
+                )}
+            />
         </Table>
     );
 }
