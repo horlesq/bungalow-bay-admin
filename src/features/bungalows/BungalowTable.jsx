@@ -2,15 +2,7 @@ import styled from "styled-components";
 import { Spinner } from "../../ui/Spinner";
 import { BungalowRow } from "./BungalowRow";
 import { useBungalows } from "./useBungalows";
-
-const Table = styled.div`
-    border: 1px solid var(--color-gray-200);
-
-    font-size: 1.4rem;
-    background-color: var(--color-gray-0);
-    border-radius: 7px;
-    overflow: hidden;
-`;
+import { Table } from "../../ui/Table";
 
 const TableHeader = styled.header`
     display: grid;
@@ -33,15 +25,15 @@ export function BungalowTable({ children }) {
     if (isLoading) return <Spinner />;
 
     return (
-        <Table role="table">
-            <TableHeader role="row">
+        <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
+            <Table.Header>
                 <div></div>
                 <div>Bungalow</div>
                 <div>Capacity</div>
                 <div>Price</div>
                 <div>Discount</div>
                 <div></div>
-            </TableHeader>
+            </Table.Header>
 
             {bungalows.map((bungalow) => (
                 <BungalowRow bungalow={bungalow} key={bungalow.id} />

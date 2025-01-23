@@ -8,18 +8,7 @@ import { useDeleteBungalow } from "./useDeleteBungalow";
 import { useCreateBungalow } from "./useCreateBungalow";
 import { Modal } from "../../ui/Modal";
 import { ConfirmDelete } from "../../ui/ConfirmDelete";
-
-const TableRow = styled.div`
-    display: grid;
-    grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-    column-gap: 2.4rem;
-    align-items: center;
-    padding: 1.4rem 2.4rem;
-
-    &:not(:last-child) {
-        border-bottom: 1px solid var(--color-gray-100);
-    }
-`;
+import { Table } from "../../ui/Table";
 
 const Img = styled.img`
     display: block;
@@ -74,7 +63,7 @@ export function BungalowRow({ bungalow }) {
     }
 
     return (
-        <TableRow role="row">
+        <Table.Row>
             <Img src={image} />
             <Bungalow>{name}</Bungalow>
             <div>Up to {maxCapacity} persons</div>
@@ -113,6 +102,6 @@ export function BungalowRow({ bungalow }) {
                     </Modal.Window>
                 </Modal>
             </div>
-        </TableRow>
+        </Table.Row>
     );
 }
