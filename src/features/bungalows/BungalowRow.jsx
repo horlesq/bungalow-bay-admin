@@ -3,11 +3,11 @@ import { IoDuplicate } from "react-icons/io5";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { formatCurrency } from "../../utils/helpers";
-import { useState } from "react";
 import { CreateBungalowForm } from "./CreateBungalowForm";
 import { useDeleteBungalow } from "./useDeleteBungalow";
 import { useCreateBungalow } from "./useCreateBungalow";
-import { max } from "date-fns";
+import { Modal } from "../../ui/Modal";
+import { ConfirmDelete } from "../../ui/ConfirmDelete";
 
 const TableRow = styled.div`
     display: grid;
@@ -49,7 +49,6 @@ const Discount = styled.div`
 `;
 
 export function BungalowRow({ bungalow }) {
-    const [showForm, setShowForm] = useState(false);
     const { isLoadingCreate, createBungalow } = useCreateBungalow();
     const { isLoadingDelete, deleteBungalow } = useDeleteBungalow();
 
@@ -75,36 +74,45 @@ export function BungalowRow({ bungalow }) {
     }
 
     return (
-        <>
-            <TableRow role="row">
-                <Img src={image} />
-                <Bungalow>{name}</Bungalow>
-                <div>Up to {maxCapacity} persons</div>
-                <Price>{formatCurrency(price)}</Price>
-                {discount ? (
-                    <Discount>{formatCurrency(discount)}</Discount>
-                ) : (
-                    <span></span>
-                )}
-                <div>
-                    <button
-                        onClick={handleDuplicate}
-                        disabled={isLoadingCreate}
-                    >
-                        <IoDuplicate />
-                    </button>
-                    <button onClick={() => setShowForm((show) => !show)}>
-                        <MdModeEdit />
-                    </button>
-                    <button
-                        onClick={() => deleteBungalow(id)}
-                        disabled={isLoadingDelete}
-                    >
-                        <MdDelete />
-                    </button>
-                </div>
-            </TableRow>
-            {showForm && <CreateBungalowForm bungalowToEdit={bungalow} />}
-        </>
+        <TableRow role="row">
+            <Img src={image} />
+            <Bungalow>{name}</Bungalow>
+            <div>Up to {maxCapacity} persons</div>
+            <Price>{formatCurrency(price)}</Price>
+            {discount ? (
+                <Discount>{formatCurrency(discount)}</Discount>
+            ) : (
+                <span></span>
+            )}
+            <div>
+                <button onClick={handleDuplicate} disabled={isLoadingCreate}>
+                    <IoDuplicate />
+                </button>
+
+                <Modal>
+                    <Modal.Open opens="bungalow-form">
+                        <button>
+                            <MdModeEdit />
+                        </button>
+                    </Modal.Open>
+                    <Modal.Window name="bungalow-form">
+                        <CreateBungalowForm bungalowToEdit={bungalow} />
+                    </Modal.Window>
+
+                    <Modal.Open opens={"delete"}>
+                        <button>
+                            <MdDelete />
+                        </button>
+                    </Modal.Open>
+                    <Modal.Window name={"delete"}>
+                        <ConfirmDelete
+                            resourceName="bungalow"
+                            disabled={isLoadingDelete}
+                            onConfirm={() => deleteBungalow(id)}
+                        />
+                    </Modal.Window>
+                </Modal>
+            </div>
+        </TableRow>
     );
 }

@@ -4,14 +4,16 @@ import { Modal } from "../../ui/Modal";
 
 export function CreateBungalow() {
     return (
-        <Modal>
-            <Modal.Open opens="bungalow-form">
-                <Button>Add bungalow</Button>
-            </Modal.Open>
+        <div>
+            <Modal>
+                <Modal.Open opens="bungalow-form">
+                    <Button>Add bungalow</Button>
+                </Modal.Open>
 
-            <Modal.Window name="bungalow-form">
-                <CreateBungalowForm />
-            </Modal.Window>
-        </Modal>
+                <Modal.Window name="bungalow-form">
+                    <CreateBungalowForm />
+                </Modal.Window>
+            </Modal>
+        </div>
     );
 }

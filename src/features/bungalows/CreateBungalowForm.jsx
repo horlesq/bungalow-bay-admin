@@ -18,16 +18,21 @@ export function CreateBungalowForm({ bungalowToEdit = {}, onClose }) {
     const { errors } = formState;
 
     const { isLoadingCreate, createBungalow } = useCreateBungalow();
-    const { isLoadingUpdate, editBungalow } = useUpdateBungalow();
+    const { isLoadingUpdate, updateBungalow } = useUpdateBungalow();
 
     function onSubmit(data) {
         const image =
             typeof data.image === "string" ? data.image : data.image[0];
 
         if (isEditing)
-            editBungalow(
+            updateBungalow(
                 { newBungalowData: { ...data, image }, id: editId },
-                { onSuccess: () => reset() }
+                {
+                    onSuccess: () => {
+                        reset();
+                        onClose?.();
+                    },
+                }
             );
         else
             createBungalow(

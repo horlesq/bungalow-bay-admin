@@ -1,4 +1,4 @@
-import Heading from "../ui/Heading";
+import {Heading} from "../ui/Heading";
 import { Row } from "../ui/Row";
 import { BungalowTable } from "../features/bungalows/BungalowTable";
 import { CreateBungalow } from "../features/bungalows/CreateBungalow";
