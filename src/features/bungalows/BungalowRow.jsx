@@ -9,6 +9,7 @@ import { useCreateBungalow } from "./useCreateBungalow";
 import { Modal } from "../../ui/Modal";
 import { ConfirmDelete } from "../../ui/ConfirmDelete";
 import { Table } from "../../ui/Table";
+import { Menus } from "../../ui/Menus";
 
 const Img = styled.img`
     display: block;
@@ -74,32 +75,42 @@ export function BungalowRow({ bungalow }) {
                 <span></span>
             )}
             <div>
-                <button onClick={handleDuplicate} disabled={isLoadingCreate}>
-                    <IoDuplicate />
-                </button>
-
                 <Modal>
-                    <Modal.Open opens="bungalow-form">
-                        <button>
-                            <MdModeEdit />
-                        </button>
-                    </Modal.Open>
-                    <Modal.Window name="bungalow-form">
-                        <CreateBungalowForm bungalowToEdit={bungalow} />
-                    </Modal.Window>
+                    <Menus.Menu>
+                        <Menus.Toggle id={id} />
+                        <Menus.List id={id}>
+                            <Menus.Button
+                                onClick={handleDuplicate}
+                                icon={<IoDuplicate />}
+                            >
+                                Duplicate
+                            </Menus.Button>
 
-                    <Modal.Open opens={"delete"}>
-                        <button>
-                            <MdDelete />
-                        </button>
-                    </Modal.Open>
-                    <Modal.Window name={"delete"}>
-                        <ConfirmDelete
-                            resourceName="bungalow"
-                            disabled={isLoadingDelete}
-                            onConfirm={() => deleteBungalow(id)}
-                        />
-                    </Modal.Window>
+                            <Modal.Open opens="bungalow-form">
+                                <Menus.Button icon={<MdModeEdit />}>
+                                    Edit
+                                </Menus.Button>
+                            </Modal.Open>
+
+                            <Modal.Open opens={"delete"}>
+                                <Menus.Button icon={<MdDelete />}>
+                                    Delete
+                                </Menus.Button>
+                            </Modal.Open>
+                        </Menus.List>
+
+                        <Modal.Window name="bungalow-form">
+                            <CreateBungalowForm bungalowToEdit={bungalow} />
+                        </Modal.Window>
+
+                        <Modal.Window name={"delete"}>
+                            <ConfirmDelete
+                                resourceName="bungalow"
+                                disabled={isLoadingDelete}
+                                onConfirm={() => deleteBungalow(id)}
+                            />
+                        </Modal.Window>
+                    </Menus.Menu>
                 </Modal>
             </div>
         </Table.Row>

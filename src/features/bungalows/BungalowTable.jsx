@@ -3,6 +3,7 @@ import { Spinner } from "../../ui/Spinner";
 import { BungalowRow } from "./BungalowRow";
 import { useBungalows } from "./useBungalows";
 import { Table } from "../../ui/Table";
+import { Menus } from "../../ui/Menus";
 
 const TableHeader = styled.header`
     display: grid;
@@ -25,22 +26,24 @@ export function BungalowTable({ children }) {
     if (isLoading) return <Spinner />;
 
     return (
-        <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
-            <Table.Header>
-                <div></div>
-                <div>Bungalow</div>
-                <div>Capacity</div>
-                <div>Price</div>
-                <div>Discount</div>
-                <div></div>
-            </Table.Header>
+        <Menus>
+            <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
+                <Table.Header>
+                    <div></div>
+                    <div>Bungalow</div>
+                    <div>Capacity</div>
+                    <div>Price</div>
+                    <div>Discount</div>
+                    <div></div>
+                </Table.Header>
 
-            <Table.Body
-                data={bungalows}
-                render={(bungalow) => (
-                    <BungalowRow bungalow={bungalow} key={bungalow.id} />
-                )}
-            />
-        </Table>
+                <Table.Body
+                    data={bungalows}
+                    render={(bungalow) => (
+                        <BungalowRow bungalow={bungalow} key={bungalow.id} />
+                    )}
+                />
+            </Table>
+        </Menus>  
     );
 }
