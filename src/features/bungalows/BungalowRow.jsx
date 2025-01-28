@@ -39,7 +39,7 @@ const Discount = styled.div`
 `;
 
 export function BungalowRow({ bungalow }) {
-    const { isLoadingCreate, createBungalow } = useCreateBungalow();
+    const { createBungalow } = useCreateBungalow();
     const { isLoadingDelete, deleteBungalow } = useDeleteBungalow();
 
     const {

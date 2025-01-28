@@ -1,29 +1,30 @@
-import styled from "styled-components";
 import { Spinner } from "../../ui/Spinner";
 import { BungalowRow } from "./BungalowRow";
 import { useBungalows } from "./useBungalows";
 import { Table } from "../../ui/Table";
 import { Menus } from "../../ui/Menus";
+import { useSearchParams } from "react-router-dom";
 
-const TableHeader = styled.header`
-    display: grid;
-    grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-    column-gap: 2.4rem;
-    align-items: center;
-
-    background-color: var(--color-gray-50);
-    border-bottom: 1px solid var(--color-gray-100);
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    font-weight: 600;
-    color: var(--color-gray-600);
-    padding: 1.6rem 2.4rem;
-`;
-
-export function BungalowTable({ children }) {
+export function BungalowTable() {
     const { isLoading, bungalows } = useBungalows();
+    const [searchParams] = useSearchParams();
 
     if (isLoading) return <Spinner />;
+
+    // Get the filter value from the URL
+    const filterValue = searchParams.get("filter") || "all";
+
+    // Filter the bungalows based on the filter value
+    let filteredBungalows = bungalows;
+    if (filterValue === "all") filteredBungalows = bungalows;
+    if (filterValue === "no-discount")
+        filteredBungalows = bungalows.filter(
+            (bungalow) => bungalow.discount === 0
+        );
+    if (filterValue === "with-discount")
+        filteredBungalows = bungalows.filter(
+            (bungalow) => bungalow.discount > 0
+        );
 
     return (
         <Menus>
@@ -38,12 +39,12 @@ export function BungalowTable({ children }) {
                 </Table.Header>
 
                 <Table.Body
-                    data={bungalows}
+                    data={filteredBungalows}
                     render={(bungalow) => (
                         <BungalowRow bungalow={bungalow} key={bungalow.id} />
                     )}
                 />
             </Table>
-        </Menus>  
+        </Menus>
     );
 }
