@@ -11,6 +11,7 @@ export function BungalowTable() {
 
     if (isLoading) return <Spinner />;
 
+    // FILTER
     // Get the filter value from the URL
     const filterValue = searchParams.get("filter") || "all";
 
@@ -26,6 +27,17 @@ export function BungalowTable() {
             (bungalow) => bungalow.discount > 0
         );
 
+    // SORT
+    // Get the sort value from the URL
+    const sortValue = searchParams.get("sort") || "name-asc";
+    const [sortKey, sortDirection] = sortValue.split("-");
+
+    // Sort the bungalows based on the sort value
+    const modifier = sortDirection === "asc" ? 1 : -1;
+    const sortBungalows = filteredBungalows.sort(
+        (a, b) => (a[sortKey] - b[sortKey]) * modifier
+    );
+
     return (
         <Menus>
             <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
@@ -39,7 +51,7 @@ export function BungalowTable() {
                 </Table.Header>
 
                 <Table.Body
-                    data={filteredBungalows}
+                    data={sortBungalows}
                     render={(bungalow) => (
                         <BungalowRow bungalow={bungalow} key={bungalow.id} />
                     )}
