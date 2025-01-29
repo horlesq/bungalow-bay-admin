@@ -18,19 +18,19 @@ export function BookingTableOperations() {
             <Sort
                 options={[
                     {
-                        value: "startDate-desc",
+                        value: "start_date-desc",
                         label: "Date: recent first",
                     },
                     {
-                        value: "startDate-asc",
+                        value: "start_date-asc",
                         label: "Date: earlier first",
                     },
                     {
-                        value: "totalPrice-desc",
+                        value: "total_price-desc",
                         label: "Amount: high to low",
                     },
                     {
-                        value: "totalPrice-asc",
+                        value: "total_price-asc",
                         label: "Amount: low to high",
                     },
                 ]}
