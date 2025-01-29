@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
 
 const StyledPagination = styled.div`
     width: 100%;
@@ -55,3 +57,59 @@ const PaginationButton = styled.button`
         color: var(--color-brand-50);
     }
 `;
+
+const PAGE_SIZE = 10;
+
+export function Pagination({ count }) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page")) || 1;
+    const pageCount = Math.ceil(count / PAGE_SIZE);
+
+    function nextPage() {
+        // Calculate the next page
+        const nextPage =
+            currentPage === pageCount ? pageCount : currentPage + 1;
+        // Set the new page in the URL
+        searchParams.set("page", nextPage);
+        setSearchParams(searchParams);
+    }
+
+    function previousPage() {
+        // Calculate the previous page
+        const previousPage = currentPage === 1 ? 1 : currentPage - 1;
+        // Set the new page in the URL
+        searchParams.set("page", previousPage);
+        setSearchParams(searchParams);
+    }
+
+    if (pageCount <= 1) return null;
+
+    return (
+        <StyledPagination>
+            <P>
+                <span>{(currentPage - 1) * PAGE_SIZE + 1}</span> to{" "}
+                <span>
+                    {currentPage === pageCount
+                        ? count
+                        : currentPage * PAGE_SIZE}
+                </span>{" "}
+                of <span>{count}</span> results
+            </P>
+
+            <Buttons>
+                <PaginationButton
+                    onClick={previousPage}
+                    disabled={currentPage === 1}
+                >
+                    <MdOutlineNavigateBefore /> <span>Previous</span>
+                </PaginationButton>
+                <PaginationButton
+                    onClick={nextPage}
+                    disabled={currentPage === pageCount}
+                >
+                    <span>Next</span> <MdOutlineNavigateNext />
+                </PaginationButton>
+            </Buttons>
+        </StyledPagination>
+    );
+}
