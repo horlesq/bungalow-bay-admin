@@ -4,12 +4,17 @@ import { useBungalows } from "./useBungalows";
 import { Table } from "../../ui/Table";
 import { Menus } from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
+import { Empty } from "../../ui/Empty";
 
 export function BungalowTable() {
     const { isLoading, bungalows } = useBungalows();
     const [searchParams] = useSearchParams();
 
     if (isLoading) return <Spinner />;
+
+    if (bungalows.length === 0) {
+        return <Empty resource="bungalows" />;
+    }
 
     // FILTER
     // Get the filter value from the URL

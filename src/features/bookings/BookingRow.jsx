@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 
-import Tag from "../../ui/Tag";
-import Table from "../../ui/Table";
+import { Tag } from "../../ui/Tag";
+import { Table } from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
@@ -34,17 +34,17 @@ const Amount = styled.div`
     font-weight: 500;
 `;
 
-function BookingRow({
+export function BookingRow({
     booking: {
         id: bookingId,
         created_at,
-        startDate,
-        endDate,
-        numNights,
-        numGuests,
-        totalPrice,
+        start_date: startDate,
+        end_date: endDate,
+        num_nights: numNights,
+        num_guests: numGuests,
+        total_price: totalPrice,
         status,
-        guests: { fullName: guestName, email },
+        guests: { full_name: guestName, email },
         bungalows: { name: bungalowName },
     },
 }) {
@@ -82,5 +82,3 @@ function BookingRow({
         </Table.Row>
     );
 }
-
-export default BookingRow;

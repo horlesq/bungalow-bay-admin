@@ -1,6 +1,19 @@
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
+export async function getBookings() {
+    const { data, error } = await supabase
+        .from("bookings")
+        .select("*, bungalows(name), guests(full_name, email)");
+
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+
+    return data;
+}
+
 export async function getBooking(id) {
     const { data, error } = await supabase
         .from("bookings")
@@ -10,7 +23,7 @@ export async function getBooking(id) {
 
     if (error) {
         console.error(error);
-        throw new Error("Booking not found");
+        throw new Error(error.message);
     }
 
     return data;
@@ -26,7 +39,7 @@ export async function getBookingsAfterDate(date) {
 
     if (error) {
         console.error(error);
-        throw new Error("Bookings could not get loaded");
+        throw new Error(error.message);
     }
 
     return data;
@@ -43,7 +56,7 @@ export async function getStaysAfterDate(date) {
 
     if (error) {
         console.error(error);
-        throw new Error("Bookings could not get loaded");
+        throw new Error(error.message);
     }
 
     return data;
@@ -65,7 +78,7 @@ export async function getStaysTodayActivity() {
 
     if (error) {
         console.error(error);
-        throw new Error("Bookings could not get loaded");
+        throw new Error(error.message);
     }
     return data;
 }
@@ -80,7 +93,7 @@ export async function updateBooking(id, obj) {
 
     if (error) {
         console.error(error);
-        throw new Error("Booking could not be updated");
+        throw new Error(error.message);
     }
     return data;
 }
@@ -94,7 +107,7 @@ export async function deleteBooking(id) {
 
     if (error) {
         console.error(error);
-        throw new Error("Booking could not be deleted");
+        throw new Error(error.message);
     }
     return data;
 }
