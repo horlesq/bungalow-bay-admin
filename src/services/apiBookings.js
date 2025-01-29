@@ -1,10 +1,13 @@
-import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
+import { getToday } from "../utils/helpers";
+import { PAGE_SIZE } from "../utils/constants";
 
-export async function getBookings({ filter, sort }) {
+export async function getBookings({ filter, sort, page }) {
     let query = supabase
         .from("bookings")
-        .select("*, bungalows(name), guests(full_name, email)");
+        .select("*, bungalows(name), guests(full_name, email)", {
+            count: "exact",
+        });
 
     // FILTER
     if (filter)
@@ -16,14 +19,17 @@ export async function getBookings({ filter, sort }) {
             ascending: sort.direction === "asc",
         });
 
-    const { data, error } = await query;
+    // PAGINATION
+    if (page) query = query.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+
+    const { data, error, count } = await query;
 
     if (error !== null) {
         console.error(error);
         throw new Error(error.message);
     }
 
-    return data;
+    return { data, count };
 }
 
 export async function getBooking(id) {
