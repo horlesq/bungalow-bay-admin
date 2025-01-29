@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { isFuture, isPast, isToday } from "date-fns";
 import supabase from "../services/supabase";
-import Button from "../ui/Button";
+import { Button } from "../ui/Button";
 import { subtractDates } from "../utils/helpers";
 
 import { bookings } from "./data-bookings";
-import { bungalows } from "./data-bungalows";
 import { guests } from "./data-guests";
+import { useBungalows } from "../features/bungalows/useBungalows";
 
 // const originalSettings = {
 //   minBookingLength: 3,
@@ -20,11 +20,6 @@ async function deleteGuests() {
     if (error) console.log(error.message);
 }
 
-async function deleteBungalows() {
-    const { error } = await supabase.from("bungalows").delete().gt("id", 0);
-    if (error) console.log(error.message);
-}
-
 async function deleteBookings() {
     const { error } = await supabase.from("bookings").delete().gt("id", 0);
     if (error) console.log(error.message);
@@ -35,12 +30,7 @@ async function createGuests() {
     if (error) console.log(error.message);
 }
 
-async function createBungalows() {
-    const { error } = await supabase.from("bungalows").insert(bungalows);
-    if (error) console.log(error.message);
-}
-
-async function createBookings() {
+async function createBookings({ bungalows }) {
     // Bookings need a guestId and a bungalowId. We can't tell Supabase IDs for each object, it will calculate them on its own. So it might be different for different people, especially after multiple uploads. Therefore, we need to first get all guestIds and bungalowIds, and then replace the original IDs in the booking data with the actual ones from the DB
     const { data: guestsIds } = await supabase
         .from("guests")
@@ -55,42 +45,41 @@ async function createBookings() {
 
     const finalBookings = bookings.map((booking) => {
         // Here relying on the order of bungalows, as they don't have and ID yet
-        const bungalow = bungalows.at(booking.bungalowId - 1);
-        const numNights = subtractDates(booking.endDate, booking.startDate);
-        const bungalowPrice =
-            numNights * (bungalow.regularPrice - bungalow.discount);
-        const extrasPrice = booking.hasBreakfast
-            ? numNights * 15 * booking.numGuests
+        const bungalow = bungalows.at(booking.bungalow_id - 1);
+        const numNights = subtractDates(booking.end_date, booking.start_date);
+        const bungalowPrice = numNights * (bungalow.price - bungalow.discount);
+        const extrasPrice = booking.has_breakfast
+            ? numNights * 15 * booking.num_guests
             : 0; // hardcoded breakfast price
         const totalPrice = bungalowPrice + extrasPrice;
 
         let status;
         if (
-            isPast(new Date(booking.endDate)) &&
-            !isToday(new Date(booking.endDate))
+            isPast(new Date(booking.end_date)) &&
+            !isToday(new Date(booking.end_date))
         )
             status = "checked-out";
         if (
-            isFuture(new Date(booking.startDate)) ||
-            isToday(new Date(booking.startDate))
+            isFuture(new Date(booking.start_date)) ||
+            isToday(new Date(booking.start_date))
         )
             status = "unconfirmed";
         if (
-            (isFuture(new Date(booking.endDate)) ||
-                isToday(new Date(booking.endDate))) &&
-            isPast(new Date(booking.startDate)) &&
-            !isToday(new Date(booking.startDate))
+            (isFuture(new Date(booking.end_date)) ||
+                isToday(new Date(booking.end_date))) &&
+            isPast(new Date(booking.start_date)) &&
+            !isToday(new Date(booking.start_date))
         )
             status = "checked-in";
 
         return {
             ...booking,
-            numNights,
-            bungalowPrice,
-            extrasPrice,
-            totalPrice,
-            guestId: allGuestIds.at(booking.guestId - 1),
-            bungalowId: allBungalowIds.at(booking.bungalowId - 1),
+            num_nights: numNights,
+            bungalow_price: bungalowPrice,
+            extras_price: extrasPrice,
+            total_price: totalPrice,
+            guest_id: allGuestIds.at(booking.guest_id - 1),
+            bungalow_id: allBungalowIds.at(booking.bungalow_id - 1),
             status,
         };
     });
@@ -101,7 +90,8 @@ async function createBookings() {
     if (error) console.log(error.message);
 }
 
-function Uploader() {
+export function Uploader() {
+    const { bungalows } = useBungalows();
     const [isLoading, setIsLoading] = useState(false);
 
     async function uploadAll() {
@@ -109,12 +99,10 @@ function Uploader() {
         // Bookings need to be deleted FIRST
         await deleteBookings();
         await deleteGuests();
-        await deleteBungalows();
 
         // Bookings need to be created LAST
         await createGuests();
-        await createBungalows();
-        await createBookings();
+        await createBookings({ bungalows });
 
         setIsLoading(false);
     }
@@ -122,7 +110,7 @@ function Uploader() {
     async function uploadBookings() {
         setIsLoading(true);
         await deleteBookings();
-        await createBookings();
+        await createBookings({ bungalows });
         setIsLoading(false);
     }
 
@@ -151,5 +139,3 @@ function Uploader() {
         </div>
     );
 }
-
-export default Uploader;
