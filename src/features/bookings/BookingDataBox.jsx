@@ -4,13 +4,13 @@ import {
     HiOutlineChatBubbleBottomCenterText,
     HiOutlineCheckCircle,
     HiOutlineCurrencyDollar,
-    HiOutlineHomeModern,
 } from "react-icons/hi2";
 
 import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import { MdOutlineBungalow } from "react-icons/md";
 
 const StyledBookingDataBox = styled.section`
     /* Box */
@@ -102,7 +102,7 @@ const Footer = styled.footer`
 `;
 
 // A purely presentational component
-function BookingDataBox({ booking }) {
+export function BookingDataBox({ booking }) {
     const {
         created_at,
         start_date: startDate,
@@ -129,7 +129,7 @@ function BookingDataBox({ booking }) {
         <StyledBookingDataBox>
             <Header>
                 <div>
-                    <HiOutlineHomeModern />
+                    <MdOutlineBungalow />
                     <p>
                         {numNights} nights in Bungalow{" "}
                         <span>{bungalowName}</span>
@@ -203,5 +203,3 @@ function BookingDataBox({ booking }) {
         </StyledBookingDataBox>
     );
 }
-
-export default BookingDataBox;
