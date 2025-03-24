@@ -9,6 +9,7 @@ import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import { Menus } from "../../ui/Menus";
 import { useNavigate } from "react-router-dom";
+import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
 
 const Bungalow = styled.div`
     font-size: 1.6rem;
@@ -93,6 +94,18 @@ export function BookingRow({
                         onClick={() => navigate("/bookings/" + bookingId)}
                     >
                         See more details
+                    </Menus.Button>
+
+                    {status === "unconfirmed" && (
+                        <Menus.Button
+                            icon={<IoIosLogIn />}
+                            onClick={() => navigate(`/checkin/${bookingId}`)}
+                        >
+                            Check in
+                        </Menus.Button>
+                    )}
+                    <Menus.Button icon={<IoIosLogOut />}>
+                        Check out
                     </Menus.Button>
                 </Menus.List>
             </Menus.Menu>
