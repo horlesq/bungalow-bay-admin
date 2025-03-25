@@ -37,6 +37,8 @@ const FilterButton = styled.button`
 
 export function Filter({ options }) {
     const [searchParams, setSearchParams] = useSearchParams();
+    if (searchParams.get("page")) searchParams.set("page", 1); // Reset the page number when the filter changes
+
     const currentFilter = searchParams.get("filter") || options[0].value;
 
     function handleClick(value) {
