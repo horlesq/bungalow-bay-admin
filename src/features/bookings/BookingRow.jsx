@@ -10,6 +10,7 @@ import { formatDistanceFromNow } from "../../utils/helpers";
 import { Menus } from "../../ui/Menus";
 import { useNavigate } from "react-router-dom";
 import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
+import { useCheckout } from "../check-in-out/useCheckout";
 
 const Bungalow = styled.div`
     font-size: 1.6rem;
@@ -53,6 +54,7 @@ export function BookingRow({
     },
 }) {
     const navigate = useNavigate();
+    const { checkout, isLoadingCheckout } = useCheckout();
 
     const statusToTagName = {
         unconfirmed: "blue",
@@ -104,9 +106,16 @@ export function BookingRow({
                             Check in
                         </Menus.Button>
                     )}
-                    <Menus.Button icon={<IoIosLogOut />}>
-                        Check out
-                    </Menus.Button>
+
+                    {status === "checked-in" && (
+                        <Menus.Button
+                            icon={<IoIosLogOut />}
+                            onClick={() => checkout(bookingId)}
+                            disabled={isLoadingCheckout}
+                        >
+                            Check out
+                        </Menus.Button>
+                    )}
                 </Menus.List>
             </Menus.Menu>
         </Table.Row>
