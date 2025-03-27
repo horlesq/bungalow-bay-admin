@@ -17,6 +17,7 @@ import { Checkin } from "./pages/Checkin";
 
 import GlobalStyles from "./styles/GlobalStyles";
 import { ProtectedRoute } from "./ui/ProtectedRoute";
+import { AuthRoute } from "./ui/AuthRoute";
 
 const queryClient = new QueryClient({
     defaultOptions: { queries: { staleTime: 60 * 1000 } },
@@ -56,7 +57,14 @@ export function App() {
                         <Route path="account" element={<Account />} />
                     </Route>
 
-                    <Route path="login" element={<Login />} />
+                    <Route
+                        path="login"
+                        element={
+                            <AuthRoute>
+                                <Login />
+                            </AuthRoute>
+                        }
+                    />
                     <Route path="*" element={<PageNotFound />} />
                 </Routes>
             </BrowserRouter>
