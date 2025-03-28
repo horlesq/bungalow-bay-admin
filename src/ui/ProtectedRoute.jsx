@@ -1,5 +1,3 @@
-import styled from "styled-components";
-
 import { useUser } from "../features/authentication/useUser";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
