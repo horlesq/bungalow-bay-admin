@@ -3,15 +3,21 @@ import { Button } from "../../ui/Button";
 import { Form } from "../../ui/Form";
 import { FormRow } from "../../ui/FormRow";
 import { Input } from "../../ui/Input";
+import { useSignup } from "./useSignup";
 
 // Email regex: /\S+@\S+\.\S+/
 
 export function SignupForm() {
-    const { register, formState, getValues, handleSubmit } = useForm();
+    const { register, formState, getValues, handleSubmit, reset } = useForm();
+    const { signup, isLoadingSignup } = useSignup();
     const { errors } = formState;
 
-    function onSubmit(data) {
-        console.log(data);
+    function onSubmit({ full_name, email, password }) {
+        // Call the signup API with the form data
+        // useSignup() is a custom hook that uses react-query to call the signup API
+        // and handle the response
+
+        signup({ full_name, email, password }, { onSettled: reset });
     }
 
     return (
@@ -20,6 +26,7 @@ export function SignupForm() {
                 <Input
                     type="text"
                     id="fullName"
+                    disabled={isLoadingSignup}
                     {...register("full_name", {
                         required: "This field is required",
                     })}
@@ -30,6 +37,7 @@ export function SignupForm() {
                 <Input
                     type="email"
                     id="email"
+                    disabled={isLoadingSignup}
                     {...register("email", {
                         required: "This field is required",
                         pattern: {
@@ -44,6 +52,7 @@ export function SignupForm() {
                 <Input
                     type="password"
                     id="password"
+                    disabled={isLoadingSignup}
                     {...register("password", {
                         required: "This field is required",
                         minLength: {
@@ -56,11 +65,12 @@ export function SignupForm() {
 
             <FormRow
                 label="Repeat password"
-                error={errors.passwordConfirm?.message}
+                error={errors.password_confirm?.message}
             >
                 <Input
                     type="password"
                     id="passwordConfirm"
+                    disabled={isLoadingSignup}
                     {...register("password_confirm", {
                         required: "This field is required",
                         validate: (value) =>
@@ -72,10 +82,14 @@ export function SignupForm() {
 
             <FormRow>
                 {/* type is an HTML attribute! */}
-                <Button variation="secondary" type="reset">
+                <Button
+                    variation="secondary"
+                    type="reset"
+                    disabled={isLoadingSignup}
+                >
                     Cancel
                 </Button>
-                <Button>Create new user</Button>
+                <Button disabled={isLoadingSignup}>Create new user</Button>
             </FormRow>
         </Form>
     );
