@@ -1,27 +1,38 @@
 import { useState } from "react";
 
-import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
+import { Button } from "../../ui/Button";
+import { FileInput } from "../../ui/FileInput";
 import { Form } from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
-import Input from "../../ui/Input";
+import { FormRow } from "../../ui/FormRow";
+import { Input } from "../../ui/Input";
 
 import { useUser } from "./useUser";
+import { useUpdateUser } from "./useUpdateUser";
 
-function UpdateUserDataForm() {
+export function UpdateUserDataForm() {
     // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
     const {
         user: {
             email,
-            user_metadata: { fullName: currentFullName },
+            user_metadata: { full_name: currentFullName },
         },
     } = useUser();
+
+    const { updateUser, isLoadingUpdate } = useUpdateUser();
 
     const [fullName, setFullName] = useState(currentFullName);
     const [avatar, setAvatar] = useState(null);
 
     function handleSubmit(e) {
         e.preventDefault();
+
+        if (!fullName) return;
+        updateUser({ full_name: fullName, avatar });
+    }
+
+    function handleCancel() {
+        setFullName(currentFullName);
+        setAvatar(null);
     }
 
     return (
@@ -35,6 +46,7 @@ function UpdateUserDataForm() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     id="fullName"
+                    disabled={isLoadingUpdate}
                 />
             </FormRow>
             <FormRow label="Avatar image">
@@ -42,10 +54,16 @@ function UpdateUserDataForm() {
                     id="avatar"
                     accept="image/*"
                     onChange={(e) => setAvatar(e.target.files[0])}
+                    disabled={isLoadingUpdate}
                 />
             </FormRow>
             <FormRow>
-                <Button type="reset" variation="secondary">
+                <Button
+                    type="reset"
+                    variation="secondary"
+                    onClick={handleCancel}
+                    disabled={isLoadingUpdate}
+                >
                     Cancel
                 </Button>
                 <Button>Update account</Button>
@@ -53,5 +71,3 @@ function UpdateUserDataForm() {
         </Form>
     );
 }
-
-export default UpdateUserDataForm;

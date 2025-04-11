@@ -86,6 +86,7 @@ export function SignupForm() {
                     variation="secondary"
                     type="reset"
                     disabled={isLoadingSignup}
+                    onClick={reset}
                 >
                     Cancel
                 </Button>
