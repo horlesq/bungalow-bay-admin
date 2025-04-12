@@ -1,5 +1,3 @@
-import { IoIosLogOut, IoMdExit } from "react-icons/io";
-
 import { ButtonIcon } from "../../ui/ButtonIcon";
 import { SpinnerMini } from "../../ui/SpinnerMini";
 

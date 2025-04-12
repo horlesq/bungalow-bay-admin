@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { UserAvatar } from "../features/authentication/UserAvatar";
 import { Logout } from "../features/authentication/Logout";
 import { DarkModeToggle } from "./DarkModeToggle";
+import { Help } from "./Help";
 
 const StyledHeader = styled.header`
     background-color: var(--color-gray-0);
@@ -25,8 +26,9 @@ export function Header() {
         <StyledHeader>
             <UserAvatar />
             <ActionsContainer>
-                <Logout />
+                <Help />
                 <DarkModeToggle />
+                <Logout />
             </ActionsContainer>
         </StyledHeader>
     );
