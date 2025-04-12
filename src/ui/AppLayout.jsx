@@ -13,7 +13,7 @@ const StyledAppLayout = styled.div`
 const Main = styled.main`
     background-color: var(--color-gray-50);
     padding: 4rem 4.8rem 6.4rem;
-    overflow: auto;
+    overflow: overlay;
 `;
 
 const Container = styled.div`

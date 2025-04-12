@@ -15,12 +15,19 @@ const StyledHeader = styled.header`
     justify-content: flex-end;
 `;
 
+const ActionsContainer = styled.div`
+    display: flex;
+    gap: 0.8rem;
+`;
+
 export function Header() {
     return (
         <StyledHeader>
             <UserAvatar />
-            <Logout />
-            <DarkModeToggle />
+            <ActionsContainer>
+                <Logout />
+                <DarkModeToggle />
+            </ActionsContainer>
         </StyledHeader>
     );
 }
