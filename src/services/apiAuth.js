@@ -102,6 +102,5 @@ export async function updateCurrentUser({ full_name, password, avatar }) {
         throw new Error(updateError.message);
     }
 
-    console.log(2);
     return updatedUser;
 }

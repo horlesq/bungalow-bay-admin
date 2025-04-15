@@ -24,6 +24,7 @@ const Icon = styled.div`
 
     /* Make these dynamic, based on the received prop */
     background-color: var(--color-${(props) => props.color}-100);
+    border: 1px solid var(--color-${(props) => props.color}-700);
 
     & svg {
         width: 3.2rem;
