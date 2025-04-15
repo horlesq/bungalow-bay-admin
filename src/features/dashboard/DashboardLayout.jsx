@@ -24,7 +24,7 @@ export function DashboardLayout() {
     } = useRecentStays();
     const { bungalows, isLoading: isLoadingBungalows } = useBungalows();
 
-    if (isLoadingBookingsStats || isLoadingBookingsStats || isLoadingBungalows)
+    if (isLoadingBookingsStats || isLoadingStaysStats || isLoadingBungalows)
         return <Spinner />;
 
     return (

@@ -8,10 +8,11 @@ function DarkModeProvider({ children }) {
 
     useEffect(() => {
         if (darkMode) {
+            document.documentElement.classList.remove("light-mode");
             document.documentElement.classList.add("dark-mode");
-        }
-        else {
+        } else {
             document.documentElement.classList.remove("dark-mode");
+            document.documentElement.classList.add("light-mode");
         }
     }, [darkMode]);
 
