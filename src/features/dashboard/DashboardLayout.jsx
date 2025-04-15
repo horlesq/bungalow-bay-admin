@@ -6,6 +6,7 @@ import { useBungalows } from "../bungalows/useBungalows";
 
 import { Spinner } from "../../ui/Spinner";
 import { Stats } from "./Stats";
+import { SalesChart } from "./SalesChart";
 
 const StyledDashboardLayout = styled.div`
     display: grid;
@@ -35,6 +36,7 @@ export function DashboardLayout() {
                 numDays={numDays}
                 numBungalows={bungalows.length}
             />
+            <SalesChart bookings={bookings} numDays={numDays}/>
         </StyledDashboardLayout>
     );
 }
