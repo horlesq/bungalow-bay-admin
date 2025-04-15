@@ -7,11 +7,12 @@ import { useBungalows } from "../bungalows/useBungalows";
 import { Spinner } from "../../ui/Spinner";
 import { Stats } from "./Stats";
 import { SalesChart } from "./SalesChart";
+import { DurationChart } from "./DurationChart";
 
 const StyledDashboardLayout = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto 34rem auto;
+    grid-template-rows: auto 34rem 38rem;
     gap: 2.4rem;
 `;
 
@@ -36,7 +37,9 @@ export function DashboardLayout() {
                 numDays={numDays}
                 numBungalows={bungalows.length}
             />
-            <SalesChart bookings={bookings} numDays={numDays}/>
+            <div>asda</div>
+            <DurationChart confirmedStays={confirmedStays} />
+            <SalesChart bookings={bookings} numDays={numDays} />
         </StyledDashboardLayout>
     );
 }

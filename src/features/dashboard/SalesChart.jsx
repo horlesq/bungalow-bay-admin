@@ -52,13 +52,13 @@ export function SalesChart({ bookings, numDays }) {
 
     const colors = darkMode
         ? {
-              totalSales: { stroke: "#c7d2fe", fill: "#4f46e5" },
+              totalSales: { stroke: "#80deea", fill: "#007c91" },
               extrasSales: { stroke: "#dcfce7", fill: "#22c55e" },
               text: "#e5e7eb",
               background: "#18212f",
           }
         : {
-              totalSales: { stroke: "#4f46e5", fill: "#c7d2fe" },
+              totalSales: { stroke: "#007c91", fill: "#80deea" },
               extrasSales: { stroke: "#16a34a", fill: "#dcfce7" },
               text: "#374151",
               background: "#fff",
@@ -66,8 +66,11 @@ export function SalesChart({ bookings, numDays }) {
 
     return (
         <StyledSalesChart>
-            <Heading as="h2">Sales</Heading>
-            <ResponsiveContainer>
+            <Heading as="h2">
+                Sales from {format(allDates.at(0), "MMM dd yyyy")} &mdash;{" "}
+                {format(allDates.at(-1), "MMM dd yyyy")}
+            </Heading>
+            <ResponsiveContainer width="100%">
                 <AreaChart data={data}>
                     <XAxis
                         dataKey="label"
