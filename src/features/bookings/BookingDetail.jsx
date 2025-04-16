@@ -34,6 +34,10 @@ export function BookingDetail() {
     const { deleteBooking, isLoadingDelete } = useDeleteBooking();
 
     if (isLoading) return <Spinner />;
+    
+    if (!booking) {
+        throw new Error("Booking not found");
+    }
 
     const { status, id: bookingId } = booking;
 

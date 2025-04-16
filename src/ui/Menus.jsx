@@ -87,6 +87,7 @@ function Toggle({ id }) {
 
     // This function will open the menu if it's closed or close it if it's open
     function handleClick(event) {
+        event.stopPropagation();
         const rect = event.target.closest("button").getBoundingClientRect();
 
         setPosition({
@@ -120,7 +121,7 @@ function List({ id, children }) {
     const { openId, position, close } = useContext(MenuContext);
 
     // Close the window when clicking outside of it
-    const ref = useOutsideClick(close);
+    const ref = useOutsideClick(close, false);
 
     if (openId !== id) return null;
     return createPortal(
