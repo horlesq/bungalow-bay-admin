@@ -2,7 +2,13 @@
 
 A full-stack web application designed to manage resort operations efficiently. The app provides tools for managing bookings, bungalows, guests, and user accounts. It features a responsive dashboard with real-time data visualization and user-friendly interfaces for day-to-day operations. The project consists of a React-based frontend and a Supabase backend for data storage and authentication.
 
-![Dashboard Screenshot](public/logo-light.png)
+![image](https://github.com/user-attachments/assets/43dd0983-6155-496d-8406-84e3817c62f7)
+![image](https://github.com/user-attachments/assets/010a148b-2a4d-4f62-84ab-519289c13132)
+![image](https://github.com/user-attachments/assets/2868513f-106c-4a15-adeb-67625eaf0450)
+![image](https://github.com/user-attachments/assets/39580b45-69fa-41a0-b309-682de3591df9)
+
+
+
 
 ## Table of Contents
 
