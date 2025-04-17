@@ -48,6 +48,7 @@ export function CreateBungalowForm({ bungalowToEdit = {}, onClose }) {
 
     function onError(errors) {
         console.error(errors);
+        throw new Error("Error creating bungalow");
     }
 
     return (
