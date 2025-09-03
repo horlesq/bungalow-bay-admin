@@ -1,4 +1,4 @@
-# Bungalow Bay Dashboard
+# Bungalow Bay Admin
 
 A full-stack web application designed to manage resort operations efficiently. The app provides tools for managing bookings, bungalows, guests, and user accounts. It features a responsive dashboard with real-time data visualization and user-friendly interfaces for day-to-day operations. The project consists of a React-based frontend and a Supabase backend for data storage and authentication.
 
