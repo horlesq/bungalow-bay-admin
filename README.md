@@ -74,6 +74,7 @@ For any inquiries or feedback, feel free to reach out via:
 - Email: adrian.horlescu@gmail.com
 - Linkedin [Adrian Horlescu](https://www.linkedin.com/in/adrian-horlescu/)
 - GitHub: [Horlesq](https://github.com/horlesq)
+- Website [horly.dev](https://horly.dev)
 
 ---
 
